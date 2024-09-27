@@ -15,7 +15,6 @@ const getOne = async (id) => {
 }
 
 async function getFilteredMovies(movieInput) {
-    console.log('tittle is ', movieInput.tittle)
     let movies = await movieData.getAll();
     
     if (movieInput.tittle) {
@@ -29,8 +28,6 @@ async function getFilteredMovies(movieInput) {
     if(movieInput.year) {
         movies = movies.filter(movie => movie.year === movieInput.year);
     }
-    
-    console.log('movies: ', movies);
     return movies;
 }
 
