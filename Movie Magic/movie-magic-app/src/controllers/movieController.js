@@ -16,4 +16,18 @@ router.post('/create', async (req, res) => {
     res.redirect('/');
 })
 
+router.get('/:movieId/details', async (req, res) => {
+    const id = req.params.movieId;
+    const movie =  await movieService.getOne(id);
+    movie.ratingView = getRatingViewData(movie.rating);
+    res.render('movies/details', {movie})
+})
+
+function getRatingViewData(rating) {
+    if(isNaN(rating)) {
+        return 'n/a'
+    }
+    return '&#x2605; '.repeat(Math.round(rating / 2))
+}
+
 export default router;
