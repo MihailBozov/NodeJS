@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { json, Router } from 'express';
 import movieService from '../services/movieService.js';
 
 const router = Router();
@@ -19,15 +19,19 @@ router.post('/create', async (req, res) => {
 router.get('/:movieId/details', async (req, res) => {
     const id = req.params.movieId;
     const movie =  await movieService.getOne(id);
-    movie.ratingView = getRatingViewData(movie.rating);
+    movie.ratingView = movieService.getRatingViewData(movie.rating);
     res.render('movies/details', {movie})
 })
 
-function getRatingViewData(rating) {
-    if(isNaN(rating)) {
-        return 'n/a'
-    }
-    return '&#x2605; '.repeat(Math.round(rating / 2))
-}
+router.get('/search', async (req, res) => {
+   const query = req.query;
+   console.log(query);
+   const movies = await movieService.getFilteredMovies(query);
+   
+    
+    res.render('home', {isSearch: true, movies});
+})
+
+
 
 export default router;
