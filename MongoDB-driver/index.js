@@ -1,4 +1,5 @@
 import { MongoClient } from 'mongodb';
+// import mongodb from 'mongodb';
 
 
 const url = 'mongodb://localhost:27017';
@@ -10,6 +11,7 @@ async function main() {
     console.log('Connected Successfully to the server');
     const db = client.db(dbName);
     const collection = db.collection('documents');
+    await collection.insertOne({name: 'Pesho'})
     
     return 'done!';
 }
