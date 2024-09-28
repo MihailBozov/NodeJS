@@ -11,9 +11,12 @@ async function main() {
     console.log('Connected Successfully to the server');
     const db = client.db(dbName);
     const collection = db.collection('documents');
-    await collection.insertOne({name: 'Pesho'})
-    
+    await collection.insertOne({ name: 'Pesho' })
+
     return 'done!';
 }
 
-main().then(console.log).catch(console.error).finally(() => client.close())
+main()
+    .then(console.log)
+    .catch(console.error)
+    .finally(() => client.close())
