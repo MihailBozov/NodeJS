@@ -24,11 +24,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/students', async (req, res) => {
-
-    //The application of the method lean() is optional; 
-    //When we use lean(), the query results will be POJOs, not Mongoose model instances.
+    
     const students = await Student.find({},{name: true, age:true, _id: false}).lean();
-
     res.json(students);
 })
 
@@ -43,9 +40,7 @@ app.get('/students/create', (req, res) => {
 })
 
 app.post('/students/create', async (req, res) => {
-    const student = new Student(req.body);
-    await student.save();
-    
+    const student = await Student.create(req.body);
     
     console.log(student);
     res.redirect('/students')
