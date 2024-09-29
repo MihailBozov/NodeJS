@@ -33,14 +33,14 @@ app.get('/students/create', (req, res) => {
         `);
 })
 
-// Read from a db
+// Read
 app.get('/students', async (req, res) => {
     const students = await Student.find().lean();
     res.json(students);
 })
 
 
-// Create new record in a db
+// Create
 app.post('/students/create', async (req, res) => {
     const student = await Student.create(req.body);
 
@@ -48,8 +48,7 @@ app.post('/students/create', async (req, res) => {
     res.redirect('/students')
 })
 
-//update record in a db
-
+//update
 app.get('/students/:id/update', async (req, res) => {
     const student = await Student.findById(req.params.id);
 
@@ -65,23 +64,17 @@ app.get('/students/:id/update', async (req, res) => {
 })
 
 app.post('/students/:id/update', async (req, res) => {
-
-    // 1st way
-    // const student = await Student.findById(req.params.id);
-    // student.name = req.body.name;
-    // student.age = Number(req.body.age);
-    // await student.save();
-    
-    // 2nd way
-    // const student = await Student.findByIdAndUpdate(req.params.id, req.body);
-    
-    // 3rd way 
-    const student = await Student.replaceOne({ _id: req.params.id }, req.body)
+    const student = await Student.findByIdAndUpdate(req.params.id, req.body);
 
     console.log(student);
     res.redirect('/students');
 })
 
-
+// Delete
+app.get('/students/:id/delete', async (req, res) => {
+    await Student.findOneAndDelete(req.params.id);
+    console.log('Deleted!');
+    res.redirect('/students')
+})
 
 app.listen(5000, () => console.log('Listening on port 5000'));
