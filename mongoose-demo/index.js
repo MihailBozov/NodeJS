@@ -52,9 +52,36 @@ app.post('/students/create', async (req, res) => {
 
 app.get('/students/:id/update', async (req, res) => {
     const student = await Student.findById(req.params.id);
-    // const student = await Student.find({_id: req.params.id})
-    
+
+    res.send(`
+        <form method="post">
+            <input type="text" name="name" value="${student.name}" placeholder="Name">
+            <input type="number" name="age" value="${student.age}" placeholder="Age">
+            <input type="submit" value="update">
+        </form>
+        `)
+
     console.log(student);
 })
+
+app.post('/students/:id/update', async (req, res) => {
+
+    // 1st way
+    // const student = await Student.findById(req.params.id);
+    // student.name = req.body.name;
+    // student.age = Number(req.body.age);
+    // await student.save();
+    
+    // 2nd way
+    // const student = await Student.findByIdAndUpdate(req.params.id, req.body);
+    
+    // 3rd way 
+    const student = await Student.replaceOne({ _id: req.params.id }, req.body)
+
+    console.log(student);
+    res.redirect('/students');
+})
+
+
 
 app.listen(5000, () => console.log('Listening on port 5000'));
