@@ -43,6 +43,16 @@
             "rating": "9.5",
             "description": "If you agree, we may use your personal information from the IMDb service (such as your past browsing history on IMDb) to personalize the ads we show you on other services. We will also personalize the ads we show you on IMDb using cookies and personal information, including personal information we may receive from third parties.",
             "id": "agbua1gm1koehq1"
+        },
+        {
+            "title": "The Substance",
+            "genre": "Dark comedy",
+            "director": "Coralie Fargeat",
+            "year": "2024",
+            "img": "https://m.media-amazon.com/images/M/MV5BZDQ1NGE5MGMtYzdlZC00ODExLWJlMDMtNWU4NjA5OWYwMDEwXkEyXkFqcGc@._V1_.jpg",
+            "rating": "7.9",
+            "description": "A fading celebrity decides to use a black-market drug, a cell-replicating substance that temporarily creates a younger, better version of herself.",
+            "id": "agbug1wm1p2sh5r"
         }
     ]
 }

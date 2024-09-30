@@ -13,9 +13,6 @@ expressConfig(app);
 handlebarsConfig(app);
 
 app.use(routes);
-app.all('*', (req, res) => {
-    res.render('404')
-})
 
 app.listen(port, () => {
     console.log(`My app is running on port ${port} ...`);

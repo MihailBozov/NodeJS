@@ -7,7 +7,10 @@ const router = Router();
 
 router.use(homeController);
 
-// here our movieController will be used only if the route starts with 'movies' 
 router.use('/movies', movieController);
+
+router.all('*', (req, res) => {
+    res.render('404')
+})
 
 export default router;

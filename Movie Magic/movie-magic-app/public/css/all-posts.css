@@ -112,6 +112,7 @@
   padding: 1em 1em;
   background: #FFB4A2;
   border-radius: 10px;
+  overflow: hidden;
 }
 
 .flip > .back > h2 {
