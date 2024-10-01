@@ -1,33 +1,40 @@
-import movieData from '../data/movieData.js';
-import uniqid from 'uniqid';
+import Movie from '../models/Movie.js';
+import movieData from '../data/movieData.js'
 
-const getAll = () => movieData.getAll();
+const getAll = () => Movie.find().lean();
 
-const create = async (movie) => {
-    movie.id = uniqid();
-    return await movieData.create(movie);
-}
+const create = (movie) => Movie.create(movie);
 
-const getOne = async (id) => {
-    const movies = await movieData.getAll();
-    const resultMovie = movies.find(movie => movie.id == id);
-    return resultMovie;
-}
+const getOne = (id) => Movie.findById(id).lean();
 
 async function getFilteredMovies(movieInput) {
-    let movies = await movieData.getAll();
     
-    if (movieInput.tittle) {
-        movies = movies.filter(movie => movie.tittle.toLowerCase().includes(movieInput.tittle.toLowerCase()));
+    let query = {};
+    
+    if(movieInput.tittle) {
+        query.tittle = {$regex: movieInput.tittle, $options: 'i'}
     }
-    
     if(movieInput.genre) {
-        movies = movies.filter(movie => movie.genre.toLowerCase() === movieInput.genre.toLowerCase());
+        query.genre = {$regex: movieInput.genre, $options: 'i'}
+    }
+    if(movieInput.year) {
+        // query.year = movieInput.year;
     }
     
-    if(movieInput.year) {
-        movies = movies.filter(movie => movie.year === movieInput.year);
-    }
+    
+    let movies = await Movie.find({ query }).lean();
+
+    // if (movieInput.tittle) {
+    //     movies = movies.filter(movie => movie.tittle.toLowerCase().includes(movieInput.tittle.toLowerCase()));
+    // }
+    
+    // if(movieInput.genre) {
+    //     movies = movies.filter(movie => movie.genre.toLowerCase() === movieInput.genre.toLowerCase());
+    // }
+    
+    // if(movieInput.year) {
+    //     movies = movies.filter(movie => movie.year === movieInput.year);
+    // }
     return movies;
 }
 
