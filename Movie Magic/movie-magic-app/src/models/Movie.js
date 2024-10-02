@@ -8,6 +8,10 @@ const movieSchema = new mongoose.Schema({
     rating: Number,
     description: String,
     img: String,
+    casts: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Cast'
+    }]
 });
 
  const Movie = mongoose.model('Movie', movieSchema);

@@ -1,13 +1,16 @@
 import Movie from '../models/Movie.js';
+import castService from './castService.js';
 
 const getAll = () => Movie.find().lean();
-
 const create = (movie) => Movie.create(movie);
-
-const getOne = (id) => Movie.findById(id).lean();
+const findById = (id) => Movie.findById(id).lean();
+const attach = async (movieId, castId) => {
+    const movie = await Movie.findById(movieId);
+    movie.casts.push(castId);
+    await movie.save();
+}
 
  function getFilteredMovies(movieInput) {
-
     let query = {};
     movieInput.tittle ? query.tittle = { $regex: movieInput.tittle, $options: 'i' } : null;
     movieInput.genre ? query.genre = { $regex: movieInput.genre, $options: 'i' } : null;
@@ -24,4 +27,4 @@ function getRatingViewData(rating) {
 }
 
 
-export default { getAll, create, getOne, getRatingViewData, getFilteredMovies };
+export default { getAll, create, findById, getRatingViewData, getFilteredMovies, attach };
