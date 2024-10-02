@@ -22,12 +22,4 @@ const attach = async (movieId, castId) => {
     return Movie.find(query).lean();
 }
 
-function getRatingViewData(rating) {
-    if (isNaN(rating) || !rating) {
-        return 'n/a'
-    }
-    return '&#x2605; '.repeat(Math.round(rating / 2))
-}
-
-
-export default { getAll, create, findById, getRatingViewData, getFilteredMovies, attach, findByIdPopulated };
+export default { getAll, create, findById, getFilteredMovies, attach, findByIdPopulated };
