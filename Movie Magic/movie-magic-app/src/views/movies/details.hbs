@@ -18,7 +18,7 @@
                 </div>
 
                 <p class="disc">Description: {{description}}</p><br>
-                
+
                 <a style="padding: 0.8em; 
                           display: inline-block;
                           font-size: 1.2em; 
@@ -28,18 +28,21 @@
                           margin-left: 0;
                           text-align: center;
                           cursor: pointer;
-                          width: 100%" 
-                   class="details"
-                   href="/movies/{{_id}}/attach">
-                          Attach Cast
+                          width: 100%" class="details" href="/movies/{{_id}}/attach">
+                    Attach Cast
                 </a>
-                 
-                
+
+
             </div>
         </div>
         <div class="card_right">
             <img src="{{img}}" alt="{{tittle}}">
         </div>
+        {{/with}}
+    </div>
+    <div class="main-cast-card">
+        {{#each movie.casts}}
+        {{>cast-card}}
+        {{/each}}
     </div>
 </section>
-{{/with}}
