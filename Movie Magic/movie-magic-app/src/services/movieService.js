@@ -13,13 +13,14 @@ const attach = async (movieId, castId) => {
 }
 
 
- function getFilteredMovies(movieInput) {
-    let query = {};
-    movieInput.tittle ? query.tittle = { $regex: movieInput.tittle, $options: 'i' } : null;
-    movieInput.genre ? query.genre = { $regex: movieInput.genre, $options: 'i' } : null;
-    movieInput.year ? query.year = movieInput.year : null;
-
-    return Movie.find(query).lean();
+ async function getFilteredMovies(movieInput) {
+    const movies = Movie.find();
+    
+    movieInput.tittle ? movies.find({tittle: {$regex: movieInput.tittle, $options: 'i'}}) : null;
+    movieInput.genre ? movies.where('genre').equals(movieInput.genre) : null;
+    movieInput.year ? movies.where('year').equals(movieInput.year) : null;
+    
+    return movies.lean();
 }
 
 export default { getAll, create, findById, getFilteredMovies, attach, findByIdPopulated };

@@ -14,7 +14,6 @@ export default function handlebarsConfig(app) {
 
 
 function renderRating (rating) {
-    console.log(rating);
     if (isNaN(rating)) {
         return 'n/a';
     }
