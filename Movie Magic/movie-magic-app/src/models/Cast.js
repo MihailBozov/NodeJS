@@ -5,6 +5,10 @@ const castSchema = new mongoose.Schema({
     age: Number,
     born: String,
     imageUrl: String,
+    movies: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'Move'
+    }]
 });
 
 const Cast = mongoose.model('Cast', castSchema);
