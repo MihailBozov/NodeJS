@@ -1,7 +1,10 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 
 
 const app = express();
+app.use(cookieParser());
+
 app.get('/', (req, res) => {
     res.send(`
             <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a>
@@ -12,11 +15,14 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => {
     
     //Read cookie
-    const cookie =  req.header('Cookie')
+    const cookie =  req.cookies;
+    const cookieValue = req.cookies['isAuthenticated'];
     console.log(cookie);
+    console.log(cookieValue);
     
     // Set cookie
-    res.setHeader('Set-Cookie', 'isAuthenticated=true');
+    res.cookie('isAuthenticated', 'true');
+    res.cookie('How are you', 'fine');
     
     res.send(`
             <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a>
