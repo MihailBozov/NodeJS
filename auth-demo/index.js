@@ -10,21 +10,22 @@ app.use(session({
     saveUninitialized: true,
     cookie: { sequre: true }
 }))
+app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
             <p>Home Page works!</p>
         `)
 })
 
-app.get('/login', (req, res) => {
+app.get('/register', (req, res) => {
     req.session.hello = Date.now();
 
     res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><br><br>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
             
-            <form action="/login" method="post">
+            <form action="/register" method="post">
                 <div>
                     <label for="email">Email</label>
                     <input type="email" name="email" id="email" />
@@ -35,22 +36,31 @@ app.get('/login', (req, res) => {
                 </div>
                 <div>
                     <br>
-                    <button type="submit">Login</button>
+                    <button type="submit">Register</button>
                 </div>
             </form>
         `);
-
-    // res.send(`
-    //         <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a>
-    //         <p>Login Page works!</p>
-    //     `);
-
     res.end();
 });
 
-app.post('/login', (req, res) => {
+
+const registeredUsers = {};
+
+
+app.post('/register', async (req, res) => {
+
+    const salt = await bcrypt.genSalt(10);
+
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    console.log('Plain password :', password);
+    console.log('Salt           :', salt);
+    console.log('Hashed password:', hashedPassword);
     
-    console.log(req.body);
+    registeredUsers[username] = hashedPassword;
+
+    res.redirect('/login')
 })
 
 app.listen('5000', () => 'The server is listening on port 5000...')
