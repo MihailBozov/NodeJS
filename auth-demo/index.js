@@ -1,5 +1,6 @@
 import express from 'express';
 import session from 'express-session';
+import bcrypt from 'bcrypt';
 
 
 const app = express();
@@ -11,11 +12,6 @@ app.use(session({
 }))
 
 app.get('/', (req, res) => {
-    
-    console.log(req.session);
-    console.log(req.session.hello)
-    console.log(req.session.id)
-    
     res.send(`
             <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a>
             <p>Home Page works!</p>
