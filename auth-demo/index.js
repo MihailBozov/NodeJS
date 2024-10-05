@@ -1,6 +1,9 @@
 import express from 'express';
 import session from 'express-session';
+import cookieParser from 'cookie-parser';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+
 
 
 const app = express();
@@ -10,11 +13,13 @@ app.use(session({
     saveUninitialized: true,
     cookie: { sequre: true }
 }))
+app.use(cookieParser());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
     res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
             <h2>Home Page works!</h2>
         `)
 })
@@ -23,7 +28,7 @@ app.get('/register', (req, res) => {
     req.session.hello = Date.now();
 
     res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
             <h2>Register</h2>
             <form action="/register" method="post">
                 <div>
@@ -43,24 +48,26 @@ app.get('/register', (req, res) => {
     res.end();
 });
 
-const registeredUsers = {};
+const registeredUsers = {
+    'sand@sand.com': '$2b$10$nekwXIVjl5tkuZpa8ZSP7.uHijeu3OxBe1jkqRqzU3Kxw1YT.C/9a',
+};
 
 app.post('/register', async (req, res) => {
-    
+
     const { email, password } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    
+
     registeredUsers[email] = hashedPassword;
-    
+    console.log(registeredUsers);
     res.redirect('/login')
 })
 
 app.get('/login', (req, res) => {
-        
+
     res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
             <h2>Login</h2>
             <form action="/login" method="post">
                 <div>
@@ -77,31 +84,59 @@ app.get('/login', (req, res) => {
                 </div>
             </form>
         `)
-        res.end();
+    res.end();
 })
 
 app.post('/login', async (req, res) => {
-    const {email, password} = req.body;
-    
-    if(!registeredUsers[email]) {
-       return res.status(400).end();
+    const { email, password } = req.body;
+
+    if (!registeredUsers[email]) {
+        return res.status(400).end();
     }
-    
+
     const plainPassword = password;
-    const hashedPassword =registeredUsers[email];
-    
+    const hashedPassword = registeredUsers[email];
+
     const compared = await bcrypt.compare(password, hashedPassword)
+
+    // Return jwt on sucessfull authentication
+    const payload = {
+        email,
+        role: 'Admin'
+    };
+
+    const jwtToken = jwt.sign(payload, 'SECRET', { expiresIn: '1h' });
+    res.cookie('auth', jwtToken);
     
-    if(compared) {
-        return res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
-            <h2>Welcome</h2>
-            `).end()
+    if (compared) {
+        return res.redirect('/profile');
+
     } else {
         return res.send(`
-            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><br><br>
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
             <h2>Invalid email or password</h2>
             `).end()
+    }
+})
+
+app.get('/profile', async (req, res) => {
+    
+    // Authenticate the user
+    const jwtToken = req.cookies['auth'];
+
+    if (!jwtToken) {
+        res.status(401).send(`
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
+            <h1>UNAUTHORIZED</h1>
+            `).end();
+    } else {
+        const decodedToken =  jwt.verify(jwtToken, 'SECRET',)
+        res.send(`
+            <span style="white-space: pre">      </span><a href="/">Home<\a><span style="white-space: pre">   </span><a href="/login">Login</a><span style="white-space: pre">   </span><a href="/register">Register</a><span style="white-space: pre">   </span><a href="/profile">Profile</a><br><br>
+            ${jwtToken}
+            ${decodedToken}
+            `).end();
+
     }
 })
 
