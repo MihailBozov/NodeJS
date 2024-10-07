@@ -17,7 +17,10 @@ router.post('/create', async (req, res) => {
     res.redirect('/');
 })
 
-router.get('/:movieId/details', async (req, res) => {
+router.get('/:movieId/details', async (req, res) => { 
+    console.log('--------------')
+    console.log(req.user?.email);
+    console.log('--------------')
     const movie =  await movieService.findByIdPopulated(req.params.movieId).lean();
     res.render('movies/details', {movie})
 })

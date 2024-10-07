@@ -19,7 +19,6 @@ router.post('/login', async (req, res) => {
         return;
     }
     
-    console.log('token:', token);
     res.cookie('auth', token, { httpOnly: true });
     res.redirect('/');
 })
