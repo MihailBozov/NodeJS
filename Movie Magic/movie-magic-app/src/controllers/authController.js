@@ -15,13 +15,8 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
     const user = req.body;
-    
-    console.log(' Does the user exist1 ?:', await userService.exists(user))
-    const result = await userService.saveUser(user)
-    
-    console.log('user:', result);
-    console.log(' Does the user exist2 ?:', await userService.exists(user))
-    
+    const result = await userService.register(user)
+
     res.redirect('/auth/login');
 });
 

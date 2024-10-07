@@ -6,13 +6,27 @@ async function exists(user) {
     return result.length ? true : false
 }
 
-async function saveUser(user) {
+function comparePasswords(user) {
+    if (user.password === user.confirmPassword) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+async function register(user) {
+    
     const doExist = await exists(user);
+    const passwordsMatch = comparePasswords(user);
+    
+    if(!passwordsMatch) {
+        return "The passwords don't match"
+    }
 
     if (!doExist) {
         const salt = await bcrypt.genSalt(10);
 
-        user.password = await bcrypt.hash(user.password, salt);      
+        user.password = await bcrypt.hash(user.password, salt);
         return await User.create(user);
     }
 
@@ -22,4 +36,4 @@ async function saveUser(user) {
 
 
 
-export default { saveUser, exists }
+export default { register, exists, comparePasswords }
