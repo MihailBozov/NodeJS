@@ -11,11 +11,11 @@ function authMiddleware(req, res, next) {
 
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decodedToken);
         return next();
 
     } catch {
-
+        res.clearCookie('auth')
+        res.redirect('/auth/login')
     }
 }
 
