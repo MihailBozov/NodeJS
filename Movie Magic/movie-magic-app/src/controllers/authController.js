@@ -12,14 +12,14 @@ router.get('/login', (req, res) => {
 router.post('/login', async (req, res) => {
     const user = req.body;
     const token = await userService.login(user);
-    
-    if(!token) {
+
+    if (!token) {
         console.log('Invalid username or password!');
         res.redirect('/auth/login');
         return;
-    } 
-    
-    res.cookie('auth', token);
+    }
+
+    res.cookie('auth', token, { httpOnly: true });
     res.redirect('/');
 })
 

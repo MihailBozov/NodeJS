@@ -15,6 +15,10 @@ function comparePasswords(user) {
     }
 }
 
+async function matchPasswordsBcrypt(dbUser, loginUser) {
+    return await bcrypt.compare(loginUser.password, dbUser.password);
+}
+
 async function register(user) {
 
     const doExist = await exists(user);
@@ -34,16 +38,21 @@ async function register(user) {
 }
 
 async function login(loginUser) {
-    const user = await exists(loginUser);
-    const checkPassword = await bcrypt.compare(loginUser.password, user.password);
+    const dbUser = await exists(loginUser);
+    
+    if(!dbUser) {
+        return null;
+    }
 
-    if (!checkPassword) {
+    const matched = await matchPasswordsBcrypt(dbUser, loginUser);
+    
+    if (!matched) {
         return null;
     }
     
     const payload = {
-        _id: user._id,
-        email: user.email
+        _id: dbUser._id,
+        email: dbUser.email
     }
     
     const jwtToken = jwt.sign(payload, 'SECRET', { expiresIn: '1h' });
