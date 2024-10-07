@@ -11,25 +11,31 @@ router.get('/create', (req, res) => {
 
 router.post('/create', async (req, res) => {
     const movieData = req.body;
-    await movieService.create(movieData)
-    
-    
+    const loggedUser = req.user;
+    await movieService.create(movieData, loggedUser)
+
+
     res.redirect('/');
 })
 
-router.get('/:movieId/details', async (req, res) => { 
-    console.log('--------------')
-    console.log(req.user?.email);
-    console.log('--------------')
-    const movie =  await movieService.findByIdPopulated(req.params.movieId).lean();
-    res.render('movies/details', {movie})
+router.get('/:movieId/details', async (req, res) => {
+    const movie = await movieService.findByIdPopulated(req.params.movieId).lean();
+    res.render('movies/details', { movie })
 })
 
 router.get('/search', async (req, res) => {
-   const query = req.query;
-   const movies = await movieService.getFilteredMovies(query);
+    const query = req.query;
+    const movies = await movieService.getFilteredMovies(query);
+
+    res.render('home', { isSearch: true, movies, query });
+})
+
+router.get('/:movieId/edit', async (req, res) => {
+    const id = req.params.movieId;
+    const movie = await movieService.findById(id).lean()
+    console.log(movie);
     
-    res.render('home', {isSearch: true, movies, query});
+    res.render('movies/edit', { movie })
 })
 
 

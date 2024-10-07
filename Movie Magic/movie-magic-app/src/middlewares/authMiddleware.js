@@ -11,7 +11,6 @@ function authMiddleware(req, res, next) {
 
     try {
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decodedToken);
         
         req.user = {
             _id: decodedToken._id,
@@ -21,7 +20,6 @@ function authMiddleware(req, res, next) {
         return next();
 
     } catch {
-        console.log('Invalid token', decodedToken);
         res.clearCookie('auth')
         res.redirect('/auth/login')
     }

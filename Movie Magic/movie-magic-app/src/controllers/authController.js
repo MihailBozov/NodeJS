@@ -14,7 +14,6 @@ router.post('/login', async (req, res) => {
     const token = await userService.login(user);
 
     if (!token) {
-        console.log('Invalid username or password!');
         res.redirect('/auth/login');
         return;
     }
@@ -34,7 +33,6 @@ router.post('/register', async (req, res) => {
 
     res.redirect('/auth/login');
 });
-
 
 
 export default router;

@@ -12,7 +12,7 @@
                     </div>
                     <div class="second-info">
                         <p class="card-year">Year: {{year}}</p>
-                        <p class="card-ranking">Rating: <span id="stars"> {{{rating rating}}} </span></p>
+                        <p class="card-ranking">Rating: <span id="stars"> {{{stars rating}}} </span></p>
                     </div>
 
                 </div>
@@ -31,7 +31,32 @@
                           width: 100%" class="details" href="/movies/{{_id}}/attach">
                     Attach Cast
                 </a>
-
+            </div>
+            <div class="details-btn" style="margin: 0; 
+                                            text-align: center; 
+                                            display: grid ; 
+                                            grid-auto-flow: column; 
+                                            gap: 2em;
+                                            width: 96%; 
+                                            padding: 0 50px 50px;">
+                                            
+                <a href="/movies/{{_id}}/edit" id="edit-button" type="button" style="border: none; 
+                                                              border-radius: 8px;
+                                                              margin: 0;
+                                                              padding: 0.8em; 
+                                                              font-size: 1.2em; 
+                                                              font-family: Roboto, sans-serif; 
+                                                              font-weight: 400; 
+                                                              letter-spacing: 1.2px;">Edit</a>
+                                                              
+                <a href="/movies/delete" id="delete-button" type="button" style="border: none; 
+                                                              border-radius: 8px;
+                                                              margin: 0;
+                                                              padding: 0.8em; 
+                                                              font-size: 1.2em; 
+                                                              font-family: Roboto, sans-serif; 
+                                                              font-weight: 400; 
+                                                              letter-spacing: 1.2px;">Delete</a>
 
             </div>
         </div>

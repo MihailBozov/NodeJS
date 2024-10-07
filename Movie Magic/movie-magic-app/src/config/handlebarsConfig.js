@@ -5,15 +5,16 @@ export default function handlebarsConfig(app) {
     app.engine('hbs', handlebars.engine({ 
         extname: 'hbs',
         helpers: {
-            rating: renderRating
+            stars: renderStars
         }
     }));
+    
     app.set('view engine', 'hbs');
     app.set('views', path.join('src', 'views'));
 }
 
 
-function renderRating (rating) {
+function renderStars (rating) {
     if (isNaN(rating)) {
         return 'n/a';
     }
