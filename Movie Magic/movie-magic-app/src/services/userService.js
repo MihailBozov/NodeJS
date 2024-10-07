@@ -24,9 +24,8 @@ async function register(user) {
     }
 
     if (!doExist) {
-        const salt = await bcrypt.genSalt(10);
-
-        user.password = await bcrypt.hash(user.password, salt);
+        // const salt = await bcrypt.genSalt(10);
+        // user.password = await bcrypt.hash(user.password, salt);
         return await User.create(user);
     }
 

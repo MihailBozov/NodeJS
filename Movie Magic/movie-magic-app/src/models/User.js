@@ -1,10 +1,17 @@
-import mongoose from "mongoose";
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
     email: String,
     password: String,
 });
 
-const User = mongoose.model('User', userSchema);
+const SALT_ROUNDS = 10;
 
+userSchema.pre("save", async function () {
+    this.password = await bcrypt.hash(this.password, SALT_ROUNDS);
+});
+
+
+const User = model('User', userSchema);
 export default User;
