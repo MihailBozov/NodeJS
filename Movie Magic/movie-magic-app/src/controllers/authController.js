@@ -4,9 +4,15 @@ import userService from '../services/userService.js'
 const router = Router();
 
 
-router.get('/login', (req, res) => {   
+router.get('/login', (req, res) => {
     res.render('auth/login')
 });
+
+router.post('/login', async (req, res) => {
+    const user = req.body;
+    token = await userService.login(user);
+    res.send(token);
+})
 
 
 router.get('/register', (req, res) => {
