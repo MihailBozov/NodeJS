@@ -40,7 +40,14 @@ async function login(loginUser) {
     if (!checkPassword) {
         return 'Invalid username or password!';
     }
-
+    
+    const payload = {
+        _id: user._id,
+        email: user.email
+    }
+    
+    const jwtToken = jwt.sign(payload, 'SECRET', { expiresIn: '1h' });
+    return jwtToken;
 }
 
 
