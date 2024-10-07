@@ -1,5 +1,6 @@
 import User from '../models/User.js'
 import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
 async function exists(user) {
@@ -55,7 +56,7 @@ async function login(loginUser) {
         email: dbUser.email
     }
     
-    const jwtToken = jwt.sign(payload, 'SECRET', { expiresIn: '1h' });
+    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
     return jwtToken;
 }
 

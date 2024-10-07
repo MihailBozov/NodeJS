@@ -16,7 +16,6 @@ async function getAll() {
 }
 
 async function saveDb(data) {
-    // console.log('data:',data);
     return await fs.writeFile(dbPath, JSON.stringify(data))
 }
 
