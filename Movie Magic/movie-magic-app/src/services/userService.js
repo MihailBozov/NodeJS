@@ -38,7 +38,7 @@ async function login(loginUser) {
     const checkPassword = await bcrypt.compare(loginUser.password, user.password);
 
     if (!checkPassword) {
-        return 'Invalid username or password!';
+        return null;
     }
     
     const payload = {
@@ -52,4 +52,4 @@ async function login(loginUser) {
 
 
 
-export default { register, exists, comparePasswords }
+export default { register, login, exists, comparePasswords }

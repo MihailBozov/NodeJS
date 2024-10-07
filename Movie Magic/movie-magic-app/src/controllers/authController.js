@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import userService from '../services/userService.js'
+import cookieParser from 'cookie-parser';
 
 const router = Router();
 
@@ -10,8 +11,16 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
     const user = req.body;
-    token = await userService.login(user);
-    res.send(token);
+    const token = await userService.login(user);
+    
+    if(!token) {
+        console.log('Invalid username or password!');
+        res.redirect('/auth/login');
+        return;
+    } 
+    
+    res.cookie('auth', token);
+    res.redirect('/');
 })
 
 
