@@ -6,12 +6,12 @@
                 them."</h2>
         </div>
 
-        <form action="/movies/edit" method="post" class="editForm">
+        <form action="/movies/{{_id}}/edit" method="post" class="editForm">
             <h2>Edit Post</h2>
             <ul class="noBullet">
                 <li>
                     <label for="title">Title:</label>
-                    <input type="text" class="inputFields" id="title" name="title" value="{{tittle}}"  />
+                    <input type="text" class="inputFields" id="title" name="tittle" value="{{tittle}}"  />
                 </li>
                 <li>
                     <label for="genre">Genre:</label>

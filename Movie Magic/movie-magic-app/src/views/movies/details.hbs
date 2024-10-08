@@ -4,7 +4,7 @@
         <div class="card_left">
             <div class="card_datails">
 
-                <h1>{{title}}</h1>
+                <h1>{{tittle}}</h1>
                 <div class="card-movie">
                     <div class="first-info">
                         <p class="card-genre">Genre: {{genre}}</p>
@@ -32,6 +32,7 @@
                     Attach Cast
                 </a>
             </div>
+            {{#if owner}}
             <div class="details-btn" style="margin: 0; 
                                             text-align: center; 
                                             display: grid ; 
@@ -39,18 +40,18 @@
                                             gap: 2em;
                                             width: 96%; 
                                             padding: 0 50px 50px;">
-                                            
+
                 <a href="/movies/{{_id}}/edit" id="edit-button" type="button" style="border: none; 
-                                                              border-radius: 8px;
+                                                              border-radius: 12px;
                                                               margin: 0;
                                                               padding: 0.8em; 
                                                               font-size: 1.2em; 
                                                               font-family: Roboto, sans-serif; 
                                                               font-weight: 400; 
                                                               letter-spacing: 1.2px;">Edit</a>
-                                                              
-                <a href="/movies/delete" id="delete-button" type="button" style="border: none; 
-                                                              border-radius: 8px;
+
+                <a href="/movies/{{_id}}/delete" id="delete-button" type="button" style="border: none; 
+                                                              border-radius: 12px;
                                                               margin: 0;
                                                               padding: 0.8em; 
                                                               font-size: 1.2em; 
@@ -59,11 +60,13 @@
                                                               letter-spacing: 1.2px;">Delete</a>
 
             </div>
+            {{/if}}
         </div>
         <div class="card_right">
             <img src="{{img}}" alt="{{tittle}}">
         </div>
-        {{/with}}
+{{/with}}
+        
     </div>
     <div class="main-cast-card">
         {{#each movie.casts}}

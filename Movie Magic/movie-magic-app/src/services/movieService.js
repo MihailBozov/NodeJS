@@ -1,14 +1,17 @@
 import Movie from '../models/Movie.js';
-import User from '../models/User.js';
-import castService from './castService.js';
 
-const getAll = () => Movie.find().lean();
-const create = async (movie, loggedUser) => Movie.create({ ...movie, owner: loggedUser })
-const findById = (id) => Movie.findById(id).lean();
+const createMovie = async (movie, loggedUser) => await Movie.create({ ...movie, owner: loggedUser });
+const updateMovie = async (movieId, movieInput) => await Movie.findByIdAndUpdate(movieId, movieInput);
+const deleteMovie = async (movieId) => await Movie.findByIdAndDelete(movieId);
+
+const findMovieById = (id) => Movie.findById(id).lean();
+const findMovieByIdPopulated = (id) => Movie.findById(id).populate('casts');
+const findAllMovies = () => Movie.find().lean();
 
 
+const isOwner = (user, movie) => movie.owner?.toString() === user?._id;
 
-const findByIdPopulated = (id) => Movie.findById(id).populate('casts');
+
 const attach = async (movieId, castId) => {
     const movie = await Movie.findById(movieId);
     movie.casts.push(castId);
@@ -26,4 +29,5 @@ async function getFilteredMovies(movieInput) {
     return movies.lean();
 }
 
-export default { getAll, create, findById, getFilteredMovies, attach, findByIdPopulated };
+
+export default { findAllMovies, createMovie, findMovieById, getFilteredMovies, attach, findMovieByIdPopulated, isOwner, updateMovie, deleteMovie };
