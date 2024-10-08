@@ -28,4 +28,11 @@ function authMiddleware(req, res, next) {
     }
 }
 
-export { authMiddleware }
+function isAuthenticated(req, res, next) {
+    if(!req.user) {
+        return res.redirect('/auth/login');
+    }
+    return next();
+}
+
+export { authMiddleware, isAuthenticated}
