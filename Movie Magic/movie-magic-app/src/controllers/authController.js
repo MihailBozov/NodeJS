@@ -29,7 +29,14 @@ router.get('/register', (req, res) => {
 
 router.post('/register', async (req, res) => {
     const user = req.body;
-    const result = await userService.register(user)
+    try{
+        const result = await userService.register(user)
+        
+    }catch(err) {
+       console.log(err.message);
+       return res.redirect('/register');
+     
+    }
 
     res.redirect('/auth/login');
 });
