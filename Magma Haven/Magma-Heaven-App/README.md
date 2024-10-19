@@ -16,4 +16,12 @@
     * Add view engine
     * Set view directory
     * Set view engine
+    * Add home view
+    * Add layout
+    * Add partials dir
+4. Add database
+    * Install mongoose `npm i mongoose`
+    * Connect to local db
+    * Add user model
+5. Authentication
     
