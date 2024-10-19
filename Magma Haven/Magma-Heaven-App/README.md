@@ -24,4 +24,8 @@
     * Connect to local db
     * Add user model
 5. Authentication
+    * Set navigation links
+    * Add auth controller
+    * Render page
+    
     
