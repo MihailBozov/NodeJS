@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 const app = express();
 
 const url = 'mongodb://localhost:27017';
-await mongoose.connect(url, { dbName: 'magma-heaven' })
+await mongoose.connect(url, { dbName: 'magma-heaven' })  //TODO change the name
         .then(() => console.log(`Connected to ${url}`))
         .catch((err) => console.log);
 

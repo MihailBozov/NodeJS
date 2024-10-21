@@ -26,6 +26,7 @@
 5. Authentication
     * Set navigation links
     * Add auth controller
-    * Render page
+    * Add auth service
+    * Hash the password
     
     
