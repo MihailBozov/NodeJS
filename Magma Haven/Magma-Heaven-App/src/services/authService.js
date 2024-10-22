@@ -21,28 +21,22 @@ async function registerUser(user) {
     user.password = await hashPassword(user.password);
     const newUser = await User.create(user);
     console.info(`New user was created with username: ${user.username}!`)
-    return newUser;
+    
+    return await generateToken(newUser);
 }
 
 async function loginUser(user) {
-    const dbUser = await User.findOne().where({email: user.email});
-    if(!dbUser) {
+    const dbUser = await User.findOne().where({ email: user.email });
+    if (!dbUser) {
         throw new Error('The email does not exist!');
     }
-    
+
     const matchLoginPassword = await bcrypt.compare(user.password, dbUser.password);
-    if(!matchLoginPassword) {
+    if (!matchLoginPassword) {
         throw new Error('The passwords do not match!')
     }
     
-    const payload = {
-        _id: dbUser._id,
-        email: dbUser.email,
-        username: dbUser.username
-    }
-    
-    const token = await jwt.sign(payload, process.env.JWT_SECRET)
-    return token;
+    return generateToken(dbUser);
 }
 
 async function findByUsername(username) {
@@ -94,6 +88,16 @@ function validateUser(user) {
     return true;
 }
 
+async function generateToken(user) {
+    const payload = {
+        _id: user._id,
+        email: user.email,
+        username: user.username
+    }
+
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '2h' })
+}
 
 
-export default { findByUsername, usernameExists,registerUser, loginUser };
+
+export default { findByUsername, usernameExists, registerUser, loginUser };
