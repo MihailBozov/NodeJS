@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import authService from '../services/authService.js';
+import { getErrorMessage } from '../utils/errorUtil.js';
 
 const authController = Router();
 
@@ -10,11 +11,12 @@ authController.get('/register', (req, res) => {
 authController.post('/register', async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
-        await authService.registerUser(user);
-        res.redirect('/auth/login');
+        const token = await authService.registerUser(user);
+        res.cookie('auth', token, { httpOnly: true })
+        res.redirect('/');
     } catch (err) {
-        res.render('auth/register', { tittle: 'Register', username: user.username, email: user.email });
-        console.error(err.message)
+        const error = getErrorMessage(err);
+        res.render('auth/register', { tittle: 'Register', username: user.username, email: user.email, error });
     }
 })
 
@@ -26,12 +28,17 @@ authController.post('/login', async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
         const token = await authService.loginUser(user);
-        res.cookie('auth', token);
+        res.cookie('auth', token, { httpOnly: true });
         res.redirect('/');
     } catch (err) {
-        console.error(err.message);
-        res.render('auth/login', { tittle: 'Login', email: user.email })
+        const error = getErrorMessage(err);
+        res.render('auth/login', { tittle: 'Login', email: user.email, error })
     }
+})
+
+authController.get('/logout', (req, res) => {
+    res.clearCookie('auth');
+    res.redirect('/')
 })
 
 

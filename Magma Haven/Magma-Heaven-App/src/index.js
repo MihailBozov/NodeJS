@@ -3,6 +3,7 @@ import express from 'express';
 import handlebars from 'express-handlebars';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
+import { authMiddleware } from './middlewares/authMiddleware.js';
 import dotenv from 'dotenv'
 
 dotenv.config();
@@ -22,6 +23,7 @@ app.set('view engine', 'hbs')
 app.use('/static', express.static('src/public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(authMiddleware)
 app.use(routes);
 
 
