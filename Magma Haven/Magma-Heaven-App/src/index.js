@@ -16,7 +16,7 @@ app.engine('hbs', handlebars.engine({ extname: 'hbs' }));
 app.set('views', 'src/views');
 app.set('view engine', 'hbs')
 
-app.use('/static', express.static('public'));
+app.use('/static', express.static('src/public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(routes);
 
