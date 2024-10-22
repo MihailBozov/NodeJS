@@ -1,5 +1,7 @@
 import User from '../models/User.js'
 import bcrypt from 'bcrypt';
+import jwt from '../lib/jwt.js';
+import dotenv from 'dotenv';
 
 async function registerUser(user) {
     if (!validateUser(user)) {
@@ -20,6 +22,27 @@ async function registerUser(user) {
     const newUser = await User.create(user);
     console.info(`New user was created with username: ${user.username}!`)
     return newUser;
+}
+
+async function loginUser(user) {
+    const dbUser = User.findOne().where({email: user.email});
+    if(!dbUser) {
+        throw new Error('The email does not exist!');
+    }
+    
+    const matchLoginPassword = await bcrypt.compare(user.password, dbUser.password);
+    if(!matchLoginPassword) {
+        throw new Error('The passwords do not match!')
+    }
+    
+    const payload = {
+        _id: dbUser._id,
+        email: dbUser.email,
+        username: dbUser.username
+    }
+    
+    const token = jwt.sign(payload, process.env.JWT_SECRET)
+    return token;
 }
 
 async function findByUsername(username) {
