@@ -13,7 +13,7 @@ authController.post('/register', async (req, res) => {
         await authService.registerUser(user);
         res.redirect('/auth/login');
     } catch (err) {
-        res.render('auth/register', {tittle: 'Register', username: user.username, email: user.email});
+        res.render('auth/register', { tittle: 'Register', username: user.username, email: user.email });
         console.error(err.message)
     }
 })
@@ -24,7 +24,14 @@ authController.get('/login', (req, res) => {
 
 authController.post('/login', async (req, res) => {
     const user = Object.assign({}, req.body);
-    await authService.loginUser(user);
+    try {
+        const token = await authService.loginUser(user);
+        res.cookie('auth', token);
+        res.redirect('/');
+    } catch (err) {
+        console.error(err.message);
+        res.render('auth/login', { tittle: 'Login', email: user.email })
+    }
 })
 
 

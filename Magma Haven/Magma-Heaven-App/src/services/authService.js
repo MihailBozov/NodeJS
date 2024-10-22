@@ -25,7 +25,7 @@ async function registerUser(user) {
 }
 
 async function loginUser(user) {
-    const dbUser = User.findOne().where({email: user.email});
+    const dbUser = await User.findOne().where({email: user.email});
     if(!dbUser) {
         throw new Error('The email does not exist!');
     }
@@ -41,7 +41,7 @@ async function loginUser(user) {
         username: dbUser.username
     }
     
-    const token = jwt.sign(payload, process.env.JWT_SECRET)
+    const token = await jwt.sign(payload, process.env.JWT_SECRET)
     return token;
 }
 
@@ -71,8 +71,7 @@ function matchRegisterPasswords(user) {
 }
 
 async function hashPassword(password) {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    return hashedPassword;
+    return await bcrypt.hash(password, 10);
 }
 
 function validateUser(user) {
@@ -97,4 +96,4 @@ function validateUser(user) {
 
 
 
-export default { registerUser, findByUsername, usernameExists };
+export default { findByUsername, usernameExists,registerUser, loginUser };
