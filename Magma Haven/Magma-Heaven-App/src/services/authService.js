@@ -2,10 +2,9 @@ import User from '../models/User.js'
 import bcrypt from 'bcrypt';
 
 async function registerUser(user) {
-    // if (!validateUser(user)) {
-    //     console.info(`Failed to create a new user!\nThe user object has missing values:\n${JSON.stringify(user, null, 2)}`);
-    //     return null;
-    // }
+    if (!validateUser(user)) {
+        throw new Error(`Failed to create a new user!\nThe user object has missing values:\n${JSON.stringify(user, null, 2)}`)
+    }
 
     if (await usernameExists(user.username)) {
         console.info(`Failed to create a new user!\nThe username already exists in the database!`)

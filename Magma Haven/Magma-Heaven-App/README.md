@@ -23,10 +23,12 @@
     * Install mongoose `npm i mongoose`
     * Connect to local db
     * Add user model
-5. Authentication
-    * Set navigation links
-    * Add auth controller
-    * Add auth service
+5. Register
+    * Install password encoder `npm i bcrypt`
     * Hash the password
+6. Login
+    * Install JWT `npm i jsonwebtoken`
+    * Install cookie parser `npm i cookie-parser`
+    * Add cookie parser middleware
     
     
