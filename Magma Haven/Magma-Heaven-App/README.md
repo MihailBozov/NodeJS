@@ -28,6 +28,7 @@
     * Hash the password
 6. Login
     * Install JWT `npm i jsonwebtoken`
+    * Convert the sync jwt to promise based jwt `import util from 'util'`
     * Install cookie parser `npm i cookie-parser`
     * Add cookie parser middleware
     
