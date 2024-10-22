@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import authService from '../services/authService.js';
 import { getErrorMessage } from '../utils/errorUtil.js';
+import { AUTH_COOKIE_NAME } from '../constants.js';
 
 const authController = Router();
 
@@ -12,7 +13,7 @@ authController.post('/register', async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
         const token = await authService.registerUser(user);
-        res.cookie('auth', token, { httpOnly: true })
+        res.cookie(AUTH_COOKIE_NAME, token, { httpOnly: true })
         res.redirect('/');
     } catch (err) {
         const error = getErrorMessage(err);
@@ -28,7 +29,7 @@ authController.post('/login', async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
         const token = await authService.loginUser(user);
-        res.cookie('auth', token, { httpOnly: true });
+        res.cookie(AUTH_COOKIE_NAME, token, { httpOnly: true });
         res.redirect('/');
     } catch (err) {
         const error = getErrorMessage(err);
@@ -37,7 +38,7 @@ authController.post('/login', async (req, res) => {
 })
 
 authController.get('/logout', (req, res) => {
-    res.clearCookie('auth');
+    res.clearCookie(AUTH_COOKIE_NAME);
     res.redirect('/')
 })
 

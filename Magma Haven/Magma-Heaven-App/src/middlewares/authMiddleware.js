@@ -1,8 +1,9 @@
+import { AUTH_COOKIE_NAME } from '../constants.js';
 import jwt from '../lib/jwt.js'
 import dotenv from 'dotenv'
 
 export async function authMiddleware(req, res, next) {
-    const token = req.cookies['auth'];
+    const token = req.cookies[AUTH_COOKIE_NAME];
     if(!token) {
         return next();
     }
@@ -15,7 +16,7 @@ export async function authMiddleware(req, res, next) {
         res.locals.user = decodedUser;
         next();
     } catch(err) {
-        res.clearCookie('auth');
+        res.clearCookie(AUTH_COOKIE_NAME);
         return redirect('/auth/login');
     }   
 }
