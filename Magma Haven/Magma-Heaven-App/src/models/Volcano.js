@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
 
 const volcanoSchema = new Schema({
     name: {
@@ -23,6 +23,7 @@ const volcanoSchema = new Schema({
     },
     typeVolcano: {
         type: String,
+        enum: ['Supervolcanoes', 'Submarine', 'Subglacial', 'Mud', 'Stratovolcanoes', 'Shield'],
         required: true
     },
     description: {
@@ -33,6 +34,12 @@ const volcanoSchema = new Schema({
         type: [],
     },
     owner: {
-        type: User
+        type: Types.ObjectId,
+        ref: 'User',
+        
     }
 })
+
+const Volcano = model('Volcano', volcanoSchema);
+
+export default Volcano;

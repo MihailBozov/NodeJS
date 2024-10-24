@@ -17,7 +17,7 @@ export async function authMiddleware(req, res, next) {
         next();
     } catch(err) {
         res.clearCookie(AUTH_COOKIE_NAME);
-        return redirect('/auth/login');
+        res.redirect('/auth/login');
     }   
 }
 
