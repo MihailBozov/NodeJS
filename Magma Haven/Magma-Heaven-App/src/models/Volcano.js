@@ -3,7 +3,7 @@ import { Schema, model, Types } from "mongoose";
 const volcanoSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
     },
     location: {
         type: String,
@@ -30,9 +30,10 @@ const volcanoSchema = new Schema({
         type: String,
         required: true
     },
-    voteList: {
-        type: [],
-    },
+    voteList: [{
+        type: Types.ObjectId,
+        ref: 'User'
+    }],
     owner: {
         type: Types.ObjectId,
         ref: 'User',

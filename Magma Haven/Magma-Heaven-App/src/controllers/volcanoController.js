@@ -28,9 +28,47 @@ volcanoController.get('/all', async (req, res) => {
 })
 
 volcanoController.get('/:id/details', async (req, res) => {
+    const volcanoId = req.params.id;
+    const userId = req.user?._id;
+    const volcano = await volcanoService.findVolcanoById(volcanoId);
+    const isOwner = volcano.owner.toString() === userId;
+    const hasVoted = await volcanoService.hasVoted(volcanoId, userId);
+
+    res.render('volcano/details', { tittle: 'Details', volcano, isOwner, hasVoted })
+})
+
+volcanoController.get('/:id/edit', async (req, res) => {
     const id = req.params.id;
     const volcano = await volcanoService.findVolcanoById(id);
-    res.render('volcano/details', {tittle: 'Details', volcano })
+    res.render('volcano/edit', { tittle: 'Edit Page', volcano })
+})
+
+volcanoController.post('/:id/edit', async (req, res) => {
+    const id = req.params.id;
+    const volcano = Object.assign({}, req.body);
+    try {
+        await volcanoService.editVolcano(id, volcano);
+        res.redirect(`/volcanoes/${id}/details`)
+
+    } catch (err) {
+        const error = getErrorMessage(err);
+        res.render(`volcano/edit`, { tittle: 'Edit Page', volcano, error });
+    }
+})
+
+volcanoController.get('/:id/delete', async (req, res) => {
+    const id = req.params.id;
+    await volcanoService.deleteVolcano(id);
+    res.redirect('/volcanoes/all')
+})
+
+volcanoController.get('/:id/vote', async (req, res) => {
+    const volcanoId = req.params.id;
+    const userId = req.user._id;
+    
+    const result = await volcanoService.vote(volcanoId, userId);
+    res.redirect(`/volcanoes/${volcanoId}/details`);
+    
 })
 
 export default volcanoController
