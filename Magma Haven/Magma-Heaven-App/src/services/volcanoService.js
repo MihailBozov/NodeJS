@@ -24,14 +24,15 @@ async function editVolcano(id, editedVolcano) {
 async function vote(volcanoId, userId) {
     const volcano = await Volcano.findById(volcanoId);
     const volcanoList = volcano.voteList;
-    
-    if(!volcanoList.includes(userId)) {
-        volcanoList.push(userId);
-        volcano.voteList= volcanoList;
-        await volcano.save();
-        return true;
+
+    if (volcanoList.includes(userId)) {
+        return false;
     }
-    return false;
+
+    volcanoList.push(userId);
+    volcano.voteList = volcanoList;
+    await volcano.save();
+    return true;
 }
 
 async function hasVoted(volcanoId, userId) {
