@@ -60,7 +60,6 @@ volcanoController.post('/:id/edit', isAuthenticated, isVolcanoOwner, async (req,
 volcanoController.get('/:id/delete', isAuthenticated, isVolcanoOwner, async (req, res) => {
     const id = req.params.id;
     await volcanoService.deleteVolcano(id);
-    console.log('progress')
     res.redirect('/volcanoes/all')
 })
 

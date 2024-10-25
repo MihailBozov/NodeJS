@@ -12,8 +12,8 @@ const app = express();
 
 const url = 'mongodb://localhost:27017';
 await mongoose.connect(url, { dbName: 'magma-heaven' })  //TODO change the name
-        .then(() => console.log(`Connected to ${url}`))
-        .catch((err) => console.log);
+        .then(() => console.info(`Connected to ${url}`))
+        .catch((err) => console.info;
 
 
 app.engine('hbs', handlebars.engine({ extname: 'hbs' }));
@@ -29,4 +29,4 @@ app.use(routes);
 
 
 
-app.listen(3000, () => console.log('The server is running on port 3000!'))
+app.listen(3000, () => console.info('The server is running on port 3000!'))
