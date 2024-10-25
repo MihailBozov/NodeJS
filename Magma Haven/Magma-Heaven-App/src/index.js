@@ -13,7 +13,7 @@ const app = express();
 const url = 'mongodb://localhost:27017';
 await mongoose.connect(url, { dbName: 'magma-heaven' })  //TODO change the name
         .then(() => console.info(`Connected to ${url}`))
-        .catch((err) => console.info;
+        .catch((err) => console.info(err));
 
 
 app.engine('hbs', handlebars.engine({ extname: 'hbs' }));
