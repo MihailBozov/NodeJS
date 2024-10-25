@@ -13,6 +13,16 @@ async function findVolcanoById(id) {
     return await Volcano.findById(id).lean();
 }
 
+async function findAllVolcanoesFiltered(filter) {
+
+    const name = filter?.name || '';
+    const type = filter?.typeVolcano || '';
+
+    let volcanoes = await Volcano.find({ name: { $regex: name, $options: 'i' }, typeVolcano: type }).lean();
+
+    return volcanoes;
+}
+
 async function deleteVolcano(id) {
     await Volcano.findByIdAndDelete(id);
 }
@@ -23,7 +33,7 @@ async function editVolcano(id, editedVolcano) {
 
 async function vote(volcanoId, userId) {
     const volcano = await Volcano.findById(volcanoId);
-    const volcanoList = volcano.voteList;
+    const volcanoList = volcano?.voteList;
 
     if (volcanoList.includes(userId)) {
         return false;
@@ -37,7 +47,7 @@ async function vote(volcanoId, userId) {
 
 async function hasVoted(volcanoId, userId) {
     const volcano = await Volcano.findById(volcanoId);
-    return volcano.voteList.includes(userId)
+    return volcano?.voteList.includes(userId)
 }
 
-export default { createVolcano, findAllVolcanoes, findVolcanoById, deleteVolcano, editVolcano, vote, hasVoted };
+export default { createVolcano, findAllVolcanoes, findVolcanoById, findAllVolcanoesFiltered, deleteVolcano, editVolcano, vote, hasVoted };

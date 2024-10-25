@@ -2,15 +2,15 @@ import { Router } from 'express';
 import authService from '../services/authService.js';
 import { getErrorMessage } from '../utils/errorUtil.js';
 import { AUTH_COOKIE_NAME } from '../constants.js';
-import { isAuthenticated, notAuthenticated } from '../middlewares/authMiddleware.js';
+import { isAuthenticated, isNotAuthenticated } from '../middlewares/authMiddleware.js';
 
 const authController = Router();
 
-authController.get('/register', notAuthenticated, (req, res) => {
+authController.get('/register', isNotAuthenticated, (req, res) => {
     res.render('auth/register', { tittle: 'Register' })
 })
 
-authController.post('/register', notAuthenticated, async (req, res) => {
+authController.post('/register', isNotAuthenticated, async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
         const token = await authService.registerUser(user);
@@ -22,11 +22,11 @@ authController.post('/register', notAuthenticated, async (req, res) => {
     }
 })
 
-authController.get('/login', notAuthenticated, (req, res) => {
+authController.get('/login', isNotAuthenticated, (req, res) => {
     res.render('auth/login', { tittle: 'Login' })
 });
 
-authController.post('/login', notAuthenticated, async (req, res) => {
+authController.post('/login', isNotAuthenticated, async (req, res) => {
     const user = Object.assign({}, req.body);
     try {
         const token = await authService.loginUser(user);

@@ -16,7 +16,7 @@ export async function authMiddleware(req, res, next) {
         req.user = decodedUser;
         res.locals.user = decodedUser;
         res.locals.isAuthenticated = true;
-        next();
+        return  next();
     } catch (err) {
         res.clearCookie(AUTH_COOKIE_NAME);
         res.redirect('/auth/login');
@@ -28,14 +28,15 @@ export function isAuthenticated(req, res, next) {
         return res.redirect('/auth/login')
     }
 
-    next();
+   return next();
 }
 
-export function notAuthenticated(req, res, next) {
+export function isNotAuthenticated(req, res, next) {
     if (req.user) {
         return res.redirect('/');
     }
-    next();
+    
+    return next();
 }
 
 export async function isVolcanoOwner(req, res, next) {
@@ -47,12 +48,13 @@ export async function isVolcanoOwner(req, res, next) {
     }
 
     const volcano = await Volcano.findById(volcanoId);
-    const ownerId = volcano.owner.toString();
+    const ownerId = volcano?.owner.toString();
 
     if (userId === ownerId) {
-        return res.redirect(`/volcanoes/${volcanoId}/details`)
+        return next();
     }
-    next();
+    
+    return res.redirect(`/volcanoes/${volcanoId}/details`)
 }
 
 export async function isNotVolcanoOwner(req, res, next) {
@@ -64,11 +66,11 @@ export async function isNotVolcanoOwner(req, res, next) {
     }
     
     const volcano = await Volcano.findById(volcanoId);
-    const ownerId = volcano.owner?.toString()
+    const ownerId = volcano?.owner.toString()
     
-    if(ownerId === userId) {
-        return res.redirect(`volcanoes/${volcanoId}/details`);
+    if(ownerId !== userId) {
+        return next()
     }
     
-    next()
+    return res.redirect(`volcanoes/${volcanoId}/details`);
 }
