@@ -19,10 +19,19 @@ export async function authMiddleware(req, res, next) {
     }   
 }
 
+
 export function isAuthenticated(req, res, next) {
-    if(!req.user) {
+    if (!req.user) {
         return res.redirect('/auth/login')
     }
-   
-    next();
+
+   return next();
+}
+
+export function isNotAuthenticated(req, res, next) {
+    if (req.user) {
+        return res.redirect('/');
+    }
+    
+    return next();
 }
